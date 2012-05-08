@@ -101,6 +101,86 @@ class Reldb( object ):
 		
 		return out	
 
+class ReldbQuery( object ):
+		def __init__( self, db, cursor = [] ):
+				self.db = db
+				self.cursor = cursor
+		
+		def start( self, source ):
+				self.cursor = [source]
+
+		def forward( self, rel_types ):
+				if not isinstance( rel_types, list ) and not ininstance( rel_types, tuple ):
+						rel_types = [rel_types]
+				results = set()
+				for entry in self.cursor:
+						conns = self.db.get( entry )
+						for conn in conns:
+								if conn.type in rel_types:
+										results.add( conn.target )
+				
+				return RedbQuery( self.db, list( results ) )
+
+		def backward( self, rel_types ):
+				if not isinstance( rel_types, list ) and not ininstance( rel_types, tuple ):
+						rel_types = [rel_types]
+				results = set()
+				for entry in self.cursor:
+						conns = self.db.reverse_get( entry )
+						for conn in conns:
+								if conn.type in rel_types:
+										results.add( conn.source )
+				
+				return ReldbQuery( self.db, list( results ) )
+
+		def union( self, other ):
+				setA = set( self.cursor )
+				setB = set( other.cursor )
+				new_set = setA.union( setB )
+				return ReldbQuery( self.db, list( new_set ) )
+	
+		def difference( self, other ):
+				setA = set( self.cursor )
+				setB = set( other.cursor )
+				new_set = setA.difference( setB )
+				return ReldbQuery( self.db, list( new_set ) )
+
+		def intersection( self, other ):
+				setA = set( self.cursor )
+				setB = set( other.cursor )
+				new_set = setA.intersection( setB )
+				return ReldbQuery( self.db, list( new_set ) )
+
+		def getRelated( self, rel_types, forward = True ):
+				if not isinstance( rel_types, list ) and not ininstance( rel_types, tuple ):
+						rel_types = [rel_types]
+
+				visited = set()
+				stack = self.cursor
+
+				while len( stack ) > 0:
+						entry = stack.pop()
+						if entry in visited:
+								continue
+						
+						visited.add( entry )
+						if forward:
+								conns = self.db.get( entry )
+								for conn in conns:
+										if conn.type in rel_types:
+												stack.append( conn.target )
+						else:
+								conns = self.db.reverse_get( entry ):
+								for conn in conns:
+										if conn.type in rel_types:
+												stack.append( conn.source )
+	
+				return ReldbQuery( self.db, list( visited ) )
+		
+		def getResults( self ):
+				return self.cursor 
+
+		
 
 db = Reldb()
 
