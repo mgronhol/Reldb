@@ -98,7 +98,7 @@ Using ReldbQuery:
 	
 	both_know = ernesto_knows.intersection( jaques_knows )
 	
-	pprint.pprint( [ reverse_users[uid] for uin in both_know.getResults() ] )
+	pprint.pprint( [ reverse_users[uid] for uid in both_know.getResults() ] )
 	
 	# And so on...
 	
