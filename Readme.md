@@ -20,7 +20,8 @@ Relations are stored as 4-tuples in Reldb: (source, target, relation_type, weigh
 	
 	Target: 64 bit unsigned integer
 
-	Relation_type: 16 bit enumerated integer (Reldb handles mapping between labels such as strings and enumerated integers transparently )
+	Relation_type: 16 bit enumerated integer (Reldb handles mapping between 
+						  labels such as strings and enumerated integers transparently )
 	
 	Weight: Double precision floating point number
 
