@@ -123,7 +123,7 @@ class Reldb( object ):
 		
 		self.lib = ctypes.cdll.LoadLibrary( "./libreldb.so.1" )
 		
-		self.lib.create_db.retype = ctypes.c_void_p
+		self.lib.create_db.restype = ctypes.c_void_p
 		
 		self.lib.destroy_db.argtypes = [ctypes.c_void_p]
 		

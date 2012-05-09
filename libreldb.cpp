@@ -137,7 +137,7 @@ extern "C" {
 		} key_vector_t;
 	
 	void* create_db(){
-		return (void*)(new Reldb() );
+		return (void*)( new Reldb() );
 		}
 	
 	void destroy_db(void *ptr){
